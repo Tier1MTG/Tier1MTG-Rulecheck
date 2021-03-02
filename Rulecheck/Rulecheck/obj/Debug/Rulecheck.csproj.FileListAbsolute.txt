@@ -1,0 +1,10 @@
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\Rulecheck.exe.config
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\Rulecheck.exe
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\Rulecheck.pdb
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\obj\Debug\Rulecheck.csprojAssemblyReference.cache
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\obj\Debug\Rulecheck.Form1.resources
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\obj\Debug\Rulecheck.Properties.Resources.resources
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\obj\Debug\Rulecheck.csproj.GenerateResource.cache
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\obj\Debug\Rulecheck.csproj.CoreCompileInputs.cache
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\obj\Debug\Rulecheck.exe
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\obj\Debug\Rulecheck.pdb
