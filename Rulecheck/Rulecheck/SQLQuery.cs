@@ -114,11 +114,12 @@ namespace Rulecheck
                 }
 
                 blocks = blocksList.ToArray();
+                var sortedBlocks = blocks.OrderBy(n => n);
 
                 rdr.Close();
                 con.Close();
 
-                return blocks;
+                return sortedBlocks.ToArray();
 
             }
             catch (Exception ex)

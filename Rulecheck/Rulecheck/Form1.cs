@@ -25,12 +25,13 @@ namespace Rulecheck
             Block[] blocks = createBlocks(expansions);
 
             insertExpansions(blocks, expansions);
-            populateTree(blocks, expansions);
+            populateTree(blocks);
+            _blockset.ExpandAll();
 
         }
 
-        string[] blockset;
-        string single = "";
+        string[] blockset; //Blockset consists of an array of set abbreviations.
+        string[] single;
         int value = -0;
         string valueSelector = "";
         string valueModifier = "";
@@ -86,13 +87,53 @@ namespace Rulecheck
         /*
         * Function that populates the tree-view checkbox, with the blocks and expansions
         */
-        private void populateTree(Block[] blocks, Expansion[] expansions)
+        private void populateTree(Block[] blocks)
         {
 
+            for (int i = 0; i < blocks.Length; i++)
+            {
+                
+                System.Windows.Forms.TreeNode treeNode = new System.Windows.Forms.TreeNode(blocks[i].blockAbbr);
+                treeNode.Name = blocks[i].blockAbbr;
+                treeNode.Text = blocks[i].blockName;
+
+                _blockset.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+                    treeNode
+                });
+
+                for(int j = 0; j < blocks[i].expansions.Length; j++)
+                {
+                    System.Windows.Forms.TreeNode treeNodeChild = new System.Windows.Forms.TreeNode(blocks[i].expansions[j].expansionAbbr);
+                    treeNodeChild.Name = blocks[i].expansions[j].expansionAbbr;
+                    treeNodeChild.Text = blocks[i].expansions[j].expansionName;
+
+                    treeNode.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+                        treeNodeChild
+                    });
+
+                }
+
+            }
+   
         }
 
-        private void _blockset_AfterSelect(object sender, TreeViewEventArgs e)
+        private void _blockset_AfterCheck(object sender, TreeViewEventArgs e)
         {
+
+            List<string> selectedNodesList = new List<string>();
+
+            foreach(TreeNode tn in _blockset.Nodes)
+            {
+                foreach(TreeNode tnc in tn.Nodes)
+                {
+                    if (tnc.Checked)
+                    {
+                        selectedNodesList.Add(tnc.Name);
+                    }
+                }
+            }
+
+            blockset = selectedNodesList.ToArray();
 
         }
 
@@ -148,6 +189,7 @@ namespace Rulecheck
         {
             Console.WriteLine(blockset+" - "+single+" - "+value+" - "+valueSelector+" - "+valueModifier+" - "+cmprice[0]);
         }
+
     }
 
 }
