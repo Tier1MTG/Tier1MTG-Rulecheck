@@ -130,6 +130,60 @@ namespace Rulecheck
             }
 
         }
+        
+        /*
+        * Function that returns the given singles from a table and from a database, and with expansion.
+        */
+        public string[] getSingles(string database, string table, string expansion)
+        {
+
+            string sqlparams = "";
+            sqlparams += "server=" + host + ";";
+            sqlparams += "user=" + user + ";";
+            sqlparams += "database=" + database + ";";
+            sqlparams += "port=" + port + ";";
+            sqlparams += "password=" + pass + ";";
+
+            MySqlConnection con = new MySqlConnection(sqlparams);
+
+            try
+            {
+
+                con.Open();
+                MySqlCommand cmd;
+                MySqlDataReader rdr;
+
+                string sql;
+
+                sql = "SELECT * FROM " + table + " WHERE expansionName='" + expansion + "'";
+                cmd = new MySqlCommand(sql, con);
+                rdr = cmd.ExecuteReader();
+
+                string[] singles;
+                List<string> singlesList = new List<string>();
+
+                while (rdr.Read())
+                {
+                    singlesList.Add(Convert.ToString(rdr[2]) + "|" + Convert.ToString(rdr[0]) + "|" + Convert.ToString(rdr[9]));
+                }
+
+                singles = singlesList.ToArray();
+                var sortedBlocks = singlesList.OrderBy(n => n);
+
+                rdr.Close();
+                con.Close();
+
+                return sortedBlocks.ToArray();
+
+            }
+            catch (Exception ex)
+            {
+                con.Close();
+                Console.WriteLine(ex);
+                return null;
+            }
+
+        }
 
     }
 }

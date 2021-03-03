@@ -30,12 +30,12 @@ namespace Rulecheck
 
         }
 
-        string[] blockset; //Blockset consists of an array of set abbreviations.
-        string[] single;
+        TreeNode[] blockset; //Blockset consists of an array of set abbreviations.
+        TreeNode[] single; //Singles consist of selected singles.
         int value = -0;
         string valueSelector = "";
         string valueModifier = "";
-        string[] cmprice = new string[2];
+        string cmprice = "";
         SQLQuery sql;
 
         /*
@@ -106,6 +106,7 @@ namespace Rulecheck
                     System.Windows.Forms.TreeNode treeNodeChild = new System.Windows.Forms.TreeNode(blocks[i].expansions[j].expansionAbbr);
                     treeNodeChild.Name = blocks[i].expansions[j].expansionAbbr;
                     treeNodeChild.Text = blocks[i].expansions[j].expansionName;
+                    treeNodeChild.Tag = blocks[i].expansions[j].blockAbbr;
 
                     treeNode.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
                         treeNodeChild
@@ -120,25 +121,60 @@ namespace Rulecheck
         private void _blockset_AfterCheck(object sender, TreeViewEventArgs e)
         {
 
-            List<string> selectedNodesList = new List<string>();
-
-            foreach(TreeNode tn in _blockset.Nodes)
+            List<TreeNode> selectedNodesList = new List<TreeNode>();
+            
+            try
             {
-                foreach(TreeNode tnc in tn.Nodes)
+
+                foreach (TreeNode tn in _blockset.Nodes)
                 {
-                    if (tnc.Checked)
+                    foreach (TreeNode tnc in tn.Nodes)
                     {
-                        selectedNodesList.Add(tnc.Name);
+                        if (tnc.Checked)
+                        {
+                            selectedNodesList.Add(tnc);
+                        }
                     }
                 }
-            }
 
-            blockset = selectedNodesList.ToArray();
+                blockset = selectedNodesList.ToArray();
+
+            } catch(Exception ex)
+            {
+
+            }
 
         }
 
-        private void _single_SelectedIndexChanged(object sender, EventArgs e)
+        private void _single_AfterCheck(object sender, TreeViewEventArgs e)
         {
+
+            List<TreeNode> selectedNodesList = new List<TreeNode>();
+
+            try
+            {
+                foreach (TreeNode tn in _single.Nodes)
+                {
+                    foreach (TreeNode tnc in tn.Nodes)
+                    {
+                        if (tnc.Checked)
+                        {
+                            selectedNodesList.Add(tnc);
+                        }
+                    }
+                }
+
+                single = selectedNodesList.ToArray();
+
+                foreach (TreeNode tn in single)
+                {
+
+                }
+
+            } catch(Exception ex)
+            {
+
+            }
 
         }
 
@@ -151,10 +187,9 @@ namespace Rulecheck
 
             bool success = Int32.TryParse(_value.Text, out number);
 
-            if (success)
+            if (success && value==-0)
             {
                 value = number;
-                Console.WriteLine(value);
             }
 
         }
@@ -174,20 +209,80 @@ namespace Rulecheck
         {
             switch (_cmprice.Text)
             {
-                case "Follow Seller":
-                    cmprice[0] = _cmprice.Text;
-                    //TODO: Alert for input to cmprice[1]
+
+                case "Trend Price":
+                    cmprice = "TREND";
+                    break;
+
+                case "Cheapest Seller":
+                    cmprice = "CHEAP";
+                    break;
+
+                case "Most Expensive Seller":
+                    cmprice = "EXPENSIVE";
                     break;
 
                 default:
-                    cmprice[0] = _cmprice.Text;
                     break;
             }
         }
 
         private void _apply_Click(object sender, EventArgs e)
         {
-            Console.WriteLine(blockset+" - "+single+" - "+value+" - "+valueSelector+" - "+valueModifier+" - "+cmprice[0]);
+            /*
+            string single = "";
+            int value = -0;
+            string valueSelector = "";
+            string valueModifier = "";
+            string cmprice = "";
+            */
+
+            if (value == -0 || valueSelector == "" || valueModifier == "" || cmprice == "" || blockset.Length < 0)
+            {
+                //Missing information.
+                MessageBox.Show("Error");
+            } else
+            {
+                //Rule succesfull, confirm creation.
+            }
+        
+        }
+
+        private void _updatesingles_Click(object sender, EventArgs e)
+        {
+
+            try {
+
+                _single.Nodes.Clear();
+                
+                foreach (TreeNode tn in blockset)
+                {
+
+                    string[] selectedExpansions = sql.getSingles("tier1mtg_mkm_lookup", Convert.ToString(tn.Tag), Convert.ToString(tn.Text));
+
+                    foreach (string s in selectedExpansions)
+                    {
+
+                        string[] sSingleNames = s.Split('|');
+
+                        System.Windows.Forms.TreeNode treeNode = new System.Windows.Forms.TreeNode(sSingleNames[0]);
+                        treeNode.Name = sSingleNames[0];
+                        treeNode.Text = "[" + sSingleNames[2] + "] " + sSingleNames[0];
+                        treeNode.Tag = sSingleNames[1];
+
+                        _single.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+                        treeNode
+                    });
+
+                    }
+
+
+                }
+            } catch(Exception ex)
+            {
+
+            }
+            
         }
 
     }
