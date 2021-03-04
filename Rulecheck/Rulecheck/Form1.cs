@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Dynamic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CsvHelper;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 
@@ -33,10 +37,12 @@ namespace Rulecheck
         TreeNode[] blockset; //Blockset consists of an array of set abbreviations.
         TreeNode[] single; //Singles consist of selected singles.
         int value = -0;
+        string rarity = "";
         string valueSelector = "";
         string valueModifier = "";
         string cmprice = "";
         SQLQuery sql;
+        Rules[] rules;
 
         /*
         * Function that creates block-objects.
@@ -101,6 +107,8 @@ namespace Rulecheck
                     treeNode
                 });
 
+                if (treeNode.Text=="Unsorted" || treeNode.Text=="World Championship Decks") treeNode.Collapse();
+
                 for(int j = 0; j < blocks[i].expansions.Length; j++)
                 {
                     System.Windows.Forms.TreeNode treeNodeChild = new System.Windows.Forms.TreeNode(blocks[i].expansions[j].expansionAbbr);
@@ -153,23 +161,36 @@ namespace Rulecheck
 
             try
             {
+                List<Rules> rClear = rules.ToList<Rules>();
+                rClear.Clear();
+                rules = rClear.ToArray();
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            try
+            {
+                List<TreeNode> sClear = single.ToList<TreeNode>();
+                sClear.Clear();
+                single = sClear.ToArray();
+            } catch(Exception ex)
+            {
+
+            }
+
+            try
+            {
                 foreach (TreeNode tn in _single.Nodes)
                 {
-                    foreach (TreeNode tnc in tn.Nodes)
+                    if(tn.Checked)
                     {
-                        if (tnc.Checked)
-                        {
-                            selectedNodesList.Add(tnc);
-                        }
+                        selectedNodesList.Add(tn);
                     }
                 }
 
                 single = selectedNodesList.ToArray();
-
-                foreach (TreeNode tn in single)
-                {
-
-                }
 
             } catch(Exception ex)
             {
@@ -205,6 +226,11 @@ namespace Rulecheck
             valueModifier = _valueModifier.Text;
         }
 
+        private void _rarity_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            rarity = _rarity.Text;
+        }
+
         private void _cmprice_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (_cmprice.Text)
@@ -229,6 +255,7 @@ namespace Rulecheck
 
         private void _apply_Click(object sender, EventArgs e)
         {
+
             /*
             string single = "";
             int value = -0;
@@ -244,6 +271,80 @@ namespace Rulecheck
             } else
             {
                 //Rule succesfull, confirm creation.
+
+                List<Rules> rulesList = new List<Rules>();
+                
+                try
+                {
+                    //Try to check for foreach in single.
+                    foreach (TreeNode tn in single)
+                    {
+                        string[] splitStrinxX = tn.Text.Split('[');
+                        string[] splitStringY = splitStrinxX[1].Split(']');
+                        Rules rule = new Rules(Convert.ToString(tn.Tag), splitStringY[0], tn.Name, splitStringY[1], rarity, value, valueSelector, valueModifier, cmprice);
+
+                        rulesList.Add(rule);
+
+                    }
+                } catch (Exception ex)
+                {
+                    //If non selected, we assume the user wants to create only expansion-based rules.
+                    foreach (TreeNode tn in blockset)
+                    {
+                        Rules rule = new Rules(Convert.ToString(tn.Tag), tn.Text, "", "", rarity, value, valueSelector, valueModifier, cmprice);
+
+                        rulesList.Add(rule);
+                    }
+                }
+
+                rules = rulesList.ToArray();
+
+                string mbMessage = "You are about to commit these rules to the database:\n";
+                string mbCaption = "Continue?";
+
+                foreach(Rules r in rules)
+                {
+                    mbMessage += "\n";
+                    mbMessage += r.rulesObject;
+                    mbMessage += "\n";
+                }
+
+                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                DialogResult result;
+
+                result = MessageBox.Show(mbMessage, mbCaption, buttons);
+
+                if (result == System.Windows.Forms.DialogResult.Yes)
+                {
+                    //User confirms the rules, and they get committed to the DB.
+                    foreach(Rules r in rules)
+                    {
+                        r.commitToSQL(sql);
+                    }
+                }
+
+                try
+                {
+                    List<Rules> rClear = rules.ToList<Rules>();
+                    rClear.Clear();
+                    rules = rClear.ToArray();
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+                try
+                {
+                    List<TreeNode> sClear = single.ToList<TreeNode>();
+                    sClear.Clear();
+                    single = sClear.ToArray();
+                }
+                catch (Exception ex)
+                {
+
+                }
+
             }
         
         }
@@ -254,7 +355,7 @@ namespace Rulecheck
             try {
 
                 _single.Nodes.Clear();
-                
+               
                 foreach (TreeNode tn in blockset)
                 {
 
@@ -265,14 +366,14 @@ namespace Rulecheck
 
                         string[] sSingleNames = s.Split('|');
 
-                        System.Windows.Forms.TreeNode treeNode = new System.Windows.Forms.TreeNode(sSingleNames[0]);
-                        treeNode.Name = sSingleNames[0];
+                        System.Windows.Forms.TreeNode treeNode = new System.Windows.Forms.TreeNode(sSingleNames[1]);
+                        treeNode.Name = sSingleNames[1];
                         treeNode.Text = "[" + sSingleNames[2] + "] " + sSingleNames[0];
-                        treeNode.Tag = sSingleNames[1];
+                        treeNode.Tag = tn.Tag;
 
                         _single.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-                        treeNode
-                    });
+                            treeNode
+                        });
 
                     }
 
@@ -282,7 +383,68 @@ namespace Rulecheck
             {
 
             }
+
             
+        }
+
+        private void _generatefiles_Click(object sender, EventArgs e)
+        {
+
+            /*string[] blocks = sql.getUniqueBlocks("tier1mtg_mkm_lookup");
+            Rules[] gRules = sql.getRules();
+
+            foreach (string b in blocks)
+            {
+                
+                string blockName = b.Split('|')[1];
+                Single[] singles = sql.getSingles("tier1mtg_mkm_lookup", blockName);
+
+                List<int> idProductList = new List<int>();
+                List<int> idMetaproductList = new List<int>();
+                List<string> enNameList = new List<string>();
+                List<string> websiteList = new List<string>();
+                List<string> imageList = new List<string>();
+                List<string> gameNameList = new List<string>();
+                List<string> categoryNameList = new List<string>();
+                List<string> numberList = new List<string>();
+                List<string> rarityList = new List<string>();
+                List<string> expansionNameList = new List<string>();
+
+                foreach (Single single in singles)
+                {
+
+                    var records = new List<object>
+                    {
+                        new {
+                            idProduct = single.idProduct,
+                            idMetaproduct = single.idMetaproduct,
+                            enName = single.enName,
+                            website = single.website,
+                            image = single.image,
+                            gameName = single.gameName,
+                            categoryName = single.categoryName,
+                            number = single.number,
+                            rarity = single.rarity,
+                            expansionName = single.expansionName
+                        },
+                    };
+
+                    using (var writer = new StreamWriter(blockName+".csv"))
+                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                    {
+                        csv.WriteRecords(records);
+                        csv.WriteRecords(records);
+                    }
+
+                }
+
+
+
+
+
+            }*/
+
+
         }
 
     }

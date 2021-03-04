@@ -40,12 +40,14 @@ namespace Rulecheck
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this._updatesingles = new System.Windows.Forms.Button();
             this._single = new System.Windows.Forms.TreeView();
+            this._generatefiles = new System.Windows.Forms.Button();
+            this._rarity = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // _value
             // 
             this._value.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._value.Location = new System.Drawing.Point(376, 394);
+            this._value.Location = new System.Drawing.Point(376, 360);
             this._value.Name = "_value";
             this._value.Size = new System.Drawing.Size(279, 26);
             this._value.TabIndex = 0;
@@ -125,9 +127,9 @@ namespace Rulecheck
             // 
             // _updatesingles
             // 
-            this._updatesingles.Location = new System.Drawing.Point(375, 352);
+            this._updatesingles.Location = new System.Drawing.Point(374, 331);
             this._updatesingles.Name = "_updatesingles";
-            this._updatesingles.Size = new System.Drawing.Size(499, 23);
+            this._updatesingles.Size = new System.Drawing.Size(500, 23);
             this._updatesingles.TabIndex = 8;
             this._updatesingles.Text = "Opdatér Singles-tabel";
             this._updatesingles.UseVisualStyleBackColor = true;
@@ -142,15 +144,50 @@ namespace Rulecheck
             this._single.ShowNodeToolTips = true;
             this._single.ShowPlusMinus = false;
             this._single.ShowRootLines = false;
-            this._single.Size = new System.Drawing.Size(500, 334);
+            this._single.Size = new System.Drawing.Size(500, 313);
             this._single.TabIndex = 9;
             this._single.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this._single_AfterCheck);
+            // 
+            // _generatefiles
+            // 
+            this._generatefiles.Location = new System.Drawing.Point(869, 494);
+            this._generatefiles.Name = "_generatefiles";
+            this._generatefiles.Size = new System.Drawing.Size(206, 72);
+            this._generatefiles.TabIndex = 10;
+            this._generatefiles.Text = "Check Regler";
+            this._generatefiles.UseVisualStyleBackColor = true;
+            this._generatefiles.Click += new System.EventHandler(this._generatefiles_Click);
+            // 
+            // _rarity
+            // 
+            this._rarity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this._rarity.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._rarity.FormattingEnabled = true;
+            this._rarity.Items.AddRange(new object[] {
+            "Masterpiece",
+            "Mythic",
+            "Rare",
+            "Special",
+            "Time Shifted",
+            "Uncommon",
+            "Common",
+            "Land",
+            "Token",
+            "Code Card",
+            "Tip Card"});
+            this._rarity.Location = new System.Drawing.Point(376, 392);
+            this._rarity.Name = "_rarity";
+            this._rarity.Size = new System.Drawing.Size(277, 28);
+            this._rarity.TabIndex = 11;
+            this._rarity.SelectedIndexChanged += new System.EventHandler(this._rarity_SelectedIndexChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1087, 578);
+            this.Controls.Add(this._rarity);
+            this.Controls.Add(this._generatefiles);
             this.Controls.Add(this._single);
             this.Controls.Add(this._updatesingles);
             this.Controls.Add(this._apply);
@@ -178,6 +215,8 @@ namespace Rulecheck
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Button _updatesingles;
         private System.Windows.Forms.TreeView _single;
+        private System.Windows.Forms.Button _generatefiles;
+        private System.Windows.Forms.ComboBox _rarity;
     }
 }
 

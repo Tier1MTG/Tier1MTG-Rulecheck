@@ -24,3 +24,15 @@ C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bi
 C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
 C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\MySql.Data.xml
 C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\obj\Debug\Rulecheck.csproj.CopyComplete
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\CsvHelper.dll
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\Microsoft.Bcl.HashCode.dll
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\CsvHelper.xml
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\Microsoft.Bcl.HashCode.xml
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\System.Buffers.xml
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\System.Memory.xml
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Mads\Desktop\kodning\Tier1MTG\Tier1MTG-Rulecheck\Rulecheck\Rulecheck\bin\Debug\System.Threading.Tasks.Extensions.xml
